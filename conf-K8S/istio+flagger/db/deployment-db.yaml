@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: results-db
+  labels:
+    app: results-db
+spec:
+  selector:
+    matchLabels:
+      app: results-db
+  template:
+    metadata:
+      labels:
+        app: results-db
+    spec:
+      containers:
+      - name: results-db
+        image: docker.io/bitnami/mongodb:latest
+        imagePullPolicy: "Always"
+        env:
+        - name: MONGODB_SYSTEM_LOG_VERBOSITY
+          value: "0"
+        - name: MONGODB_DISABLE_SYSTEM_LOG
+          value: "no"
+        - name: MONGODB_ENABLE_IPV6
+          value: "yes"
+        ports:
+        - name: mongodb
+          containerPort: 27017
+        livenessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        readinessProbe:
+          exec:
+            command:
+            - mongo
+            - --eval
+            - "db.adminCommand('ping')"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 6
+        volumeMounts:
+        - name: data
+          mountPath: /bitnami/mongodb
+        resources:
+          {}
+          
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: results-db

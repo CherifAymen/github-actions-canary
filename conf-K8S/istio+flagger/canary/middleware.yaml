@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware
+  labels:
+    app: middleware
+spec:
+  selector:
+    matchLabels:
+      app: middleware
+  template:
+    metadata:
+      labels:
+        app: middleware
+        version: go
+        #        version: java
+    spec:
+      containers:
+      - name: middleware
+        image: aymencherif/analyseur-sentiment-middleware-go:mongoDB
+        env:
+        - name:  URL
+          value:  "http://model" 
+        - name: DB
+          value: "results-db" 
+        ports:
+        - containerPort: 8080
+          #        image: aymencherif/analyseur-sentiment-middleware-java:mongoDB
+          #        env:
+          #        - name:  SA_LOGIC_API_URL
+          #          value:  "http://model" 
+          #        - name: SPRING_DATA_MONGODB_URI
+          #          value: "mongodb://results-db:27017" 
+          #        ports:
+          #        - containerPort: 8080

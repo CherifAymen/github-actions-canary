@@ -1,0 +1,12 @@
+.deco{
+    /*background: url(back.jpg);*/
+    background: rgb(19,6,78);
+    background: linear-gradient(127deg, rgba(19,6,78,1) 0%, rgba(62,8,102,1) 87%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden ;
+}
+
+.deco2{
+    transform: translate(-100px,30px);
+}
